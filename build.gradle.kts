@@ -1,19 +1,34 @@
 plugins {
-    id("java")
+  java
+  id("com.diffplug.spotless") version "6.25.0"
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+allprojects {
+  group = "com.bits.ss.fitmind"
+  version = "0.0.1-SNAPSHOT"
+}
 
-repositories {
+subprojects {
+  apply(plugin = "java")
+  apply(plugin = "com.diffplug.spotless")
+
+  repositories {
+    mavenLocal()
     mavenCentral()
-}
+  }
 
-dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-}
+  spotless {
+    format("misc") {
+      target("*.md")
+      trimTrailingWhitespace()
+      endWithNewline()
+    }
+    java {
+      toggleOffOn()
+      googleJavaFormat().reflowLongStrings()
+    }
+    kotlinGradle { ktfmt().googleStyle() }
+  }
 
-tasks.test {
-    useJUnitPlatform()
+  tasks.test { useJUnitPlatform() }
 }
