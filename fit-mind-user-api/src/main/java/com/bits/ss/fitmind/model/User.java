@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.StringJoiner;
 
 public final class User {
   public static final String DATE_PATTERN = "dd-MM-yyyy";
@@ -79,5 +80,26 @@ public final class User {
   @JsonProperty("date_of_birth")
   public String getDobString() {
     return DATE_FORMATTER.format(dateOfBirth);
+  }
+
+  @Override
+  public String toString() {
+    StringJoiner result = new StringJoiner(", ", "{", "}");
+    if (id != null) {
+      result.add("\"id\": " + "\"" + id + "\"");
+    }
+    if (firstName != null) {
+      result.add("\"first_name\": " + "\"" + firstName + "\"");
+    }
+    if (lastName != null) {
+      result.add("\"last_name\": " + "\"" + lastName + "\"");
+    }
+    if (email != null) {
+      result.add("\"email\": " + "\"" + email + "\"");
+    }
+    if (dateOfBirth != null) {
+      result.add("\"date_of_birth\": " + "\"" + getDobString() + "\"");
+    }
+    return result.toString();
   }
 }

@@ -10,11 +10,17 @@ allprojects {
 
 subprojects {
   apply(plugin = "java")
+  apply(plugin = "maven-publish")
   apply(plugin = "com.diffplug.spotless")
 
   repositories {
     mavenLocal()
     mavenCentral()
+  }
+
+  java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_17
   }
 
   spotless {
@@ -28,6 +34,14 @@ subprojects {
       googleJavaFormat().reflowLongStrings()
     }
     kotlinGradle { ktfmt().googleStyle() }
+  }
+
+  configure<PublishingExtension> {
+    publications {
+      create<MavenPublication>("main") {
+        from(components["java"])
+      }
+    }
   }
 
   tasks.test { useJUnitPlatform() }
